@@ -23,7 +23,7 @@ async def start(client, message):
     if message.chat.type in ['group', 'supergroup']:
         buttons = [
             [
-                InlineKeyboardButton('ᴜᴘᴅᴀᴛᴇs', url='https://t.me/MovieHubOfficialGroup')
+                InlineKeyboardButton('ᴜᴘᴅᴀᴛᴇs', url='https://t.me/ML_MOVIE_LOKAM')
             ],
             [
                 InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
@@ -106,10 +106,10 @@ async def start(client, message):
             ],[
             InlineKeyboardButton('🔍sᴇᴀʀᴄʜ ʜᴇʀᴇ ᴍᴏᴠɪᴇ🔎', switch_inline_query_current_chat='')
             ],[
-            InlineKeyboardButton('ᴅᴇᴠᴇʟᴏᴘᴇʀ', url='https://t.me/ABHISHEKSVLOG'),
-            InlineKeyboardButton('ɢʀᴏᴜᴘ', url='https://t.me/MovieHubOfficialGroup')
+            InlineKeyboardButton('ᴅᴇᴠᴇʟᴏᴘᴇʀ', url='https://t.me/Bad_Bunny_444'),
+            InlineKeyboardButton('ɢʀᴏᴜᴘ', url='https://t.me/ML_MOVIE_LOKAM')
             ],[
-            InlineKeyboardButton('ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ', url='https://t.me/Justaupdatechannel'),
+            InlineKeyboardButton('ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ', url='https://t.me/ML_MOVIE_LOKAM'),
             ],[
             InlineKeyboardButton('✗ ᴄʟᴏsᴇ ᴛʜᴇ ᴍᴇɴᴜ ✗' , callback_data='close_data')
         ]]
