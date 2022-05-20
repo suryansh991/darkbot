@@ -873,7 +873,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
         await asyncio.sleep(1)
         await o.delete()
         await query.message.edit_text(
-            text=script.ABOUT_TXT.format(temp.B_NAME),
+            text=script.ABOUT_TXT.format(query.from_user.mention),
             reply_markup=reply_markup,
             parse_mode='html',
         )
