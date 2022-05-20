@@ -450,9 +450,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await msg1.delete()
             await msg.delete()
             del msg1, msg
-        except Exception as e:
-            logger.exception(e, exc_info=True)
-            await query.answer(f"Encountering Issues", True)
 
     elif query.data.startswith("checksub"):
         if AUTH_CHANNEL and not await is_subscribed(client, query):
