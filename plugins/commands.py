@@ -1,7 +1,5 @@
-import imp
 import os
 import logging
-import pyrogram
 import random
 import asyncio
 from Script import script
@@ -10,7 +8,7 @@ from pyrogram.errors import ChatAdminRequired, FloodWait
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from database.ia_filterdb import Media, get_file_details, unpack_new_file_id
 from database.users_chats_db import db
-from info import CHANNELS, ADMINS, AUTH_CHANNEL, LOG_CHANNEL, PICS, BATCH_FILE_CAPTION, CUSTOM_FILE_CAPTION, PROTECT_CONTENT, START_IMAGE_URL
+from info import CHANNELS, ADMINS, AUTH_CHANNEL, LOG_CHANNEL, PICS, CUSTOM_FILE_CAPTION, BATCH_FILE_CAPTION, PROTECT_CONTENT
 from utils import get_settings, get_size, is_subscribed, save_group_settings, temp
 from database.connections_mdb import active_connection
 import re
@@ -20,73 +18,62 @@ logger = logging.getLogger(__name__)
 
 BATCH_FILES = {}
 
-@Client.on_message(filters.command("start") & filters.incoming & ~filters.edited)
-async def start(client, message: pyrogram.types.Message):
-
+@Client.on_message(filters.command("start"))
+async def start(client, message):
     if message.chat.type in ['group', 'supergroup']:
-        buttons = [[
-        InlineKeyboardButton("◽ Channel", url=f'https://t.me/ss_linkz'),
-        InlineKeyboardButton("Group ◽", url =f'https://t.me/Netflix_Movies_Group')
-    ]]
-       
+        buttons = [
+            [
+                InlineKeyboardButton('ᴜᴘᴅᴀᴛᴇs', url='https://t.me/MovieHubOfficialGroup')
+            ],
+            [
+                InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
+                InlineKeyboardButton('ᴄʟᴏsᴇ ✗', callback_data="close_data"),
+            ]
+            ]
         reply_markup = InlineKeyboardMarkup(buttons)
-        if not START_IMAGE_URL:
-            await message.reply(
-                script.START_TXT.format(
-                    (message.from_user.mention if 
-                    message.from_user else 
-                    message.chat.title), 
-                    temp.U_NAME, 
-                    temp.B_NAME,
-                ),
-                reply_markup=reply_markup
-            )
-        else:
-            await message.reply_photo(
-                photo=START_IMAGE_URL,
-                caption=script.START_TXT.format(
-                    (message.from_user.mention if 
-                    message.from_user else 
-                    message.chat.title), 
-                    temp.U_NAME, 
-                    temp.B_NAME,
-                ),
-                reply_markup=reply_markup
-            )
-        await asyncio.sleep(2) # 😢 https://github.com/EvamariaTG/EvaMaria/blob/master/plugins/p_ttishow.py#L17 😬 wait a bit, before checking.
-        
+        await client.send_sticker(chat_id=message.chat.id, sticker='CAACAgUAAxkBAAJc-GIfWR3hIR_5MRjwkOdkT41wrBcHAAIVAQACyJRkFGZEMKKnFWwTHgQ', reply_markup=reply_markup, reply_to_message_id=message.message_id)
+        await asyncio.sleep(60)
         if not await db.get_chat(message.chat.id):
             total=await client.get_chat_members_count(message.chat.id)
             await client.send_message(LOG_CHANNEL, script.LOG_TEXT_G.format(message.chat.title, message.chat.id, total, "Unknown"))       
             await db.add_chat(message.chat.id, message.chat.title)
         return 
-    
     if not await db.is_user_exist(message.from_user.id):
         await db.add_user(message.from_user.id, message.from_user.first_name)
         await client.send_message(LOG_CHANNEL, script.LOG_TEXT_P.format(message.from_user.id, message.from_user.mention))
-    
     if len(message.command) != 2:
-
         buttons = [[
-        InlineKeyboardButton("◽ Channel", url=f'https://t.me/ss_linkz'),
-        InlineKeyboardButton("Group ◽", url =f'https://t.me/Netflix_Movies_Group')
-    ]]
-
+            InlineKeyboardButton('ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀᴛ', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+            ],[
+            InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
+            InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+            ],[
+            InlineKeyboardButton('🔍sᴇᴀʀᴄʜ ʜᴇʀᴇ ᴍᴏᴠɪᴇ🔎', switch_inline_query_current_chat='')
+            ],[
+            InlineKeyboardButton('ᴅᴇᴠᴇʟᴏᴘᴇʀ', url='https://t.me/ABHISHEKSVLOG'),
+            InlineKeyboardButton('ɢʀᴏᴜᴘ', url='https://t.me/MovieHubOfficialGroup')
+            ],[
+            InlineKeyboardButton('ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ', url='https://t.me/Justaupdatechannel'),
+            ],[
+            InlineKeyboardButton('✗ ᴄʟᴏsᴇ ᴛʜᴇ ᴍᴇɴᴜ ✗' , callback_data='close_data')
+        ]]
         reply_markup = InlineKeyboardMarkup(buttons)
-
+        await message.reply_chat_action("typing")
+        m=await message.reply_sticker("CAACAgUAAxkBAAEO6RtiO7D4w8Paf-xsd4NCdvg8efiU1wACFQEAAsiUZBRmRDCipxVsEyME") 
+        await asyncio.sleep(2)
+        await m.delete()
+        await message.reply_chat_action("typing")
         await message.reply_photo(
-            photo=START_IMAGE_URL if START_IMAGE_URL else random.choice(PICS),
-            caption=script.START_TXT.format(
-                (message.from_user.mention if 
-                message.from_user else 
-                message.chat.title), 
-                temp.U_NAME, 
-                temp.B_NAME,
-            ),
-            reply_markup=reply_markup
+            photo=random.choice(PICS),
+            caption=script.START_TXT.format(message.from_user.mention, temp.U_NAME, temp.B_NAME),
+            reply_markup=reply_markup,
+            parse_mode='html'
         )
+        await message.reply_chat_action("Typing")
+        m=await message.reply_sticker("CAACAgUAAxkBAAEQ8XRiO8iXcdMUHwiie4V7IrblsmAAAQkAApwAA8iUZBRzjwAB89rFhfweBA") 
+        await asyncio.sleep(20)
+        await m.delete()
         return
-
     if AUTH_CHANNEL and not await is_subscribed(client, message):
         try:
             invite_link = await client.create_chat_invite_link(int(AUTH_CHANNEL))
@@ -96,15 +83,13 @@ async def start(client, message: pyrogram.types.Message):
         btn = [
             [
                 InlineKeyboardButton(
-                    "🤖 Join Updates Channel", url=invite_link.invite_link
+                    "Jᴏɪɴ Oғғɪᴄɪᴀʟ Cʜᴀɴɴᴇʟ", url=invite_link.invite_link
                 )
             ]
         ]
 
         if message.command[1] != "subscribe":
-            kk, file_id = message.command[1].split("_", 1)
-            pre = 'checksubp' if kk == 'filep' else 'checksub' 
-            btn.append([InlineKeyboardButton(" 🔄 Try Again", callback_data=f"{pre}#{file_id}")])
+            btn.append([InlineKeyboardButton("🔁 𝐓𝐫𝐲 𝐀𝐠𝐚𝐢𝐧 🔁", callback_data=f"checksub#{message.command[1]}")])
         await client.send_message(
             chat_id=message.from_user.id,
             text="**Please Join My Updates Channel to use this Bot!**",
@@ -112,17 +97,25 @@ async def start(client, message: pyrogram.types.Message):
             parse_mode="markdown"
             )
         return
-
-    if len(message.command) == 2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
-
+    if len(message.command) ==2 and message.command[1] in ["subscribe", "error", "okay", "help"]:
         buttons = [[
-        InlineKeyboardButton("◽ Channel", url=f'https://t.me/ss_linkz'),
-        InlineKeyboardButton("Group ◽", url =f'https://t.me/Netflix_Movies_Group')
-    ]]
-        
+            InlineKeyboardButton('ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ᴄʜᴀᴛ', url=f'http://t.me/{temp.U_NAME}?startgroup=true')
+            ],[
+            InlineKeyboardButton('ʜᴇʟᴘ', callback_data='help'),
+            InlineKeyboardButton('ᴀʙᴏᴜᴛ', callback_data='about')
+            ],[
+            InlineKeyboardButton('🔍sᴇᴀʀᴄʜ ʜᴇʀᴇ ᴍᴏᴠɪᴇ🔎', switch_inline_query_current_chat='')
+            ],[
+            InlineKeyboardButton('ᴅᴇᴠᴇʟᴏᴘᴇʀ', url='https://t.me/ABHISHEKSVLOG'),
+            InlineKeyboardButton('ɢʀᴏᴜᴘ', url='https://t.me/MovieHubOfficialGroup')
+            ],[
+            InlineKeyboardButton('ᴜᴘᴅᴀᴛᴇs ᴄʜᴀɴɴᴇʟ', url='https://t.me/Justaupdatechannel'),
+            ],[
+            InlineKeyboardButton('✗ ᴄʟᴏsᴇ ᴛʜᴇ ᴍᴇɴᴜ ✗' , callback_data='close_data')
+        ]]
         reply_markup = InlineKeyboardMarkup(buttons)
         await message.reply_photo(
-            photo=START_IMAGE_URL if START_IMAGE_URL else random.choice(PICS),
+            photo=random.choice(PICS),
             caption=script.START_TXT.format(message.from_user.mention, temp.U_NAME, temp.B_NAME),
             reply_markup=reply_markup,
             parse_mode='html'
@@ -226,7 +219,6 @@ async def start(client, message: pyrogram.types.Message):
                     continue
             await asyncio.sleep(1) 
         return await sts.delete()
-        
 
     files_ = await get_file_details(file_id)           
     if not files_:
@@ -264,6 +256,15 @@ async def start(client, message: pyrogram.types.Message):
             f_caption=f_caption
     if f_caption is None:
         f_caption = f"{files.file_name}"
+    buttons = [
+        [
+            InlineKeyboardButton('𝑮𝒓𝒐𝒖𝒑', url='https://t.me/MovieHubOfficialGroup'),
+            InlineKeyboardButton('𝑫𝒆𝒗𝒆𝒍𝒐𝒑𝒆𝒓', url='https://t.me/Abhisheksvlog')
+        ],
+        [
+            InlineKeyboardButton('𝑪𝒉𝒂𝒏𝒏𝒆𝒍', url=f'https://t.me/justaupdatechannel')
+        ]
+        ]
     await client.send_cached_media(
         chat_id=message.from_user.id,
         file_id=file_id,
@@ -316,7 +317,7 @@ async def delete(bot, message):
     """Delete file from database"""
     reply = message.reply_to_message
     if reply and reply.media:
-        msg = await message.reply("Processing...⏳", quote=True)
+        msg = await message.reply("𝐇𝐚𝐜𝐤𝐢𝐧𝐠....👩🏻‍💻", quote=True)
     else:
         await message.reply('Reply to file with /delete which you want to delete', quote=True)
         return
@@ -367,12 +368,12 @@ async def delete_all_index(bot, message):
             [
                 [
                     InlineKeyboardButton(
-                        text="YES", callback_data="autofilter_delete"
+                        text="⚡ 𝐘𝐞𝐬 ⚡", callback_data="autofilter_delete"
                     )
                 ],
                 [
                     InlineKeyboardButton(
-                        text="CANCEL", callback_data="close_data"
+                        text="❄ 𝐂𝐚𝐧𝐜𝐞𝐥 ❄", callback_data="close_data"
                     )
                 ],
             ]
@@ -437,23 +438,14 @@ async def settings(client, message):
                     'Single' if settings["button"] else 'Double',
                     callback_data=f'setgs#button#{settings["button"]}#{grp_id}',
                 ),
-            ],[
-                InlineKeyboardButton(
-                    'Redirect To',
-                    callback_data=f'setgs#redirect_to#{settings["redirect_to"]}#{grp_id}',
-                ),
-                InlineKeyboardButton(
-                    '👤 PM' if settings["redirect_to"] == "PM" else '📄 Chat',
-                    callback_data=f'setgs#redirect_to#{settings["redirect_to"]}#{grp_id}',
-                ),
             ],
             [
                 InlineKeyboardButton(
-                    'Bot PM',
+                    '𝐁𝐎𝐓 𝐏𝐌',
                     callback_data=f'setgs#botpm#{settings["botpm"]}#{grp_id}',
                 ),
                 InlineKeyboardButton(
-                    '✅ Yes' if settings["botpm"] else '❌ No',
+                    '✅ 𝐘𝐄𝐒' if settings["botpm"] else '🗑️ 𝐍𝐎',
                     callback_data=f'setgs#botpm#{settings["botpm"]}#{grp_id}',
                 ),
             ],
