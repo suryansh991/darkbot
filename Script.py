@@ -4,7 +4,7 @@ class script(object):
 ✴️ 𝙈𝙖𝙠𝙚 𝙈𝙚 𝘼𝙨 𝘼𝙙𝙢𝙞𝙣
 ✴️ 𝙄 𝙒𝙄𝙇𝙇 𝙋𝙧𝙤𝙫𝙞𝙙𝙚 𝙈𝙊𝙑𝙄𝙀𝙎 𝙏𝙝𝙚𝙧𝙚
 ✴️𝙏𝙝𝙚𝙣 𝙎𝙚𝙚 𝙈𝙮 𝙋𝙤𝙬𝙚𝙧𝙨 𝙊𝙣 𝙔𝙤𝙪𝙧 𝙂𝙧𝙤𝙪𝙥✨️
-©️ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙy @Bad_Bunny_444
+©️ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙy @DarkestXmarket666
 ➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖➖
 """
     HELP_TXT = """<b>𝖧𝖾𝗋𝖾 𝗂𝗌 𝗍𝗁𝖾 𝖴𝗌𝗎𝖺𝗅 𝖼𝗈𝗆𝗆𝖺𝗇𝖽𝗌:</b>
@@ -29,7 +29,7 @@ class script(object):
     ABOUT_TXT = """
 𝐌𝐲 𝐍𝐚𝐦𝐞 : <a href=https://t.me/{}>{}</a> 
 
-🦁𝐂𝐫𝐞𝐚𝐭𝐨𝐫 : <a href=https://t.me/Bad_Bunny_444>ᵀʰᵉ вα∂ вυηηу 🇮🇳/🇬🇧</a>
+🦁𝐂𝐫𝐞𝐚𝐭𝐨𝐫 : <a href=https://t.me/Suryansh_Pandit1</a>
 
 🌀𝐋𝐚𝐧𝐠𝐮𝐚𝐠𝐞 : 𝐏𝐲𝐭𝐡𝐨𝐧
 
